@@ -1,0 +1,2 @@
+[ ] non-white page bg
+[ ] rounded borders

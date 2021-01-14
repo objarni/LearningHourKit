@@ -4,6 +4,7 @@ import Browser
 import Element exposing (Element, rgb)
 import Element.Background
 import Element.Border as Border
+import Palette
 
 
 type Model
@@ -57,9 +58,6 @@ view model =
 lessonBox : Model -> Element a
 lessonBox (Model lesson) =
     let
-        backgroundColor =
-            Element.rgb255 225 225 225
-
         summaryE =
             Element.paragraph [] [ Element.text lesson.summary ]
 
@@ -70,7 +68,7 @@ lessonBox (Model lesson) =
         [ Element.centerX -- these two centers the div
         , Element.centerY
         , Border.color (rgb 0 0.7 0)
-        , Element.Background.color backgroundColor
+        , Element.Background.color Palette.contentBackground
         , Element.width (Element.px 800)
         , Element.height (Element.px 600)
         , Element.padding 40
