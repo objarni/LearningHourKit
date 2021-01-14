@@ -73,6 +73,7 @@ lessonBox (Model lesson) =
         , Element.Background.color backgroundColor
         , Element.width (Element.px 800)
         , Element.height (Element.px 600)
+        , Element.padding 40
         ]
         (Element.el
             -- these two centers the Element.text in div
