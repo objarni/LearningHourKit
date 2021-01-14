@@ -4,4 +4,8 @@ import Element
 
 
 contentBackground =
-    Element.rgb255 225 225 225
+    Element.rgb255 255 255 255
+
+
+pageBackground =
+    Element.rgb255 245 245 255

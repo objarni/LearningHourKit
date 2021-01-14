@@ -50,7 +50,7 @@ triangulation as a concept.
 
 
 view model =
-    Element.layout []
+    Element.layout [ Element.Background.color Palette.pageBackground ]
         -- layout converts from Element to Html
         (lessonBox model)
 
