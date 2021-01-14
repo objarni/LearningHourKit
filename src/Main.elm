@@ -63,6 +63,15 @@ lessonBox (Model lesson) =
 
         titleE =
             Element.text lesson.title
+
+        navigateE =
+            Element.row [ Element.alignBottom, Element.centerX ] [ Element.text "<", Element.text ">" ]
+
+        lessonDesc =
+            Element.column
+                -- these two centers the Element.text in div
+                [ Element.centerX, Element.padding 40 ]
+                [ Element.column [] [ titleE, summaryE ] ]
     in
     Element.el
         [ Element.centerX -- these two centers the div
@@ -70,13 +79,11 @@ lessonBox (Model lesson) =
         , Border.color (rgb 0 0.7 0)
         , Element.Background.color Palette.contentBackground
         , Element.width (Element.px 800)
-        , Element.height (Element.px 600)
-        , Element.padding 40
         ]
-        (Element.el
-            -- these two centers the Element.text in div
-            [ Element.centerX ]
-            (Element.column [] [ titleE, summaryE ])
+        (Element.column [ Element.height (Element.px 600) ]
+            [ lessonDesc
+            , navigateE
+            ]
         )
 
 
