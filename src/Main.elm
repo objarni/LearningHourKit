@@ -4,6 +4,7 @@ import Browser
 import Element exposing (Element, rgb)
 import Element.Background
 import Element.Border as Border
+import Html.Attributes
 import Palette
 
 
@@ -50,7 +51,17 @@ triangulation as a concept.
 
 
 view model =
-    Element.layout [ Element.Background.color Palette.pageBackground ]
+    let
+        ideaPadLink =
+            Element.link [ Element.htmlAttribute (Html.Attributes.target "_blank") ]
+                { url = "https://docs.google.com/document/d/17aUn98u1xRURT7ifPApN633IDSlXLqJMecwCh3Z_fok/edit"
+                , label = Element.text "Idea Scratch Pad"
+                }
+    in
+    Element.layout
+        [ Element.Background.color Palette.pageBackground
+        , Element.inFront ideaPadLink
+        ]
         -- layout converts from Element to Html
         (lessonBox model)
 
