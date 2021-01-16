@@ -53,7 +53,11 @@ view : Model -> Document msg
 view model =
     let
         ideaPadLink =
-            Element.link [ Element.htmlAttribute (Html.Attributes.target "_blank") ]
+            Element.link
+                [ Element.alignBottom
+                , Element.alignRight
+                , Element.htmlAttribute (Html.Attributes.target "_blank")
+                ]
                 { url = "https://docs.google.com/document/d/17aUn98u1xRURT7ifPApN633IDSlXLqJMecwCh3Z_fok/edit"
                 , label = Element.text "Idea Scratch Pad"
                 }
@@ -104,7 +108,7 @@ lessonBox (Model lesson) =
 
 update : Msg -> Model -> ( Model, Cmd a )
 update msg model =
-        ( model, Cmd.none )
+    ( model, Cmd.none )
 
 
 main : Program () Model Msg
