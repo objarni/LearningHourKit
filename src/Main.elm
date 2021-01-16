@@ -181,7 +181,7 @@ lessonBox (Model lesson) =
         , Element.Background.color Palette.contentBackground
         , Element.width (Element.px 800)
         ]
-        (Element.column [ Element.height (Element.px 600) ]
+        (Element.column []
             [ lessonDesc
             , navigateE
             ]
