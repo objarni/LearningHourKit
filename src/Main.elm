@@ -1,11 +1,13 @@
 module Main exposing (main)
 
-import Browser
+import Browser exposing (Document, UrlRequest)
+import Browser.Navigation as Nav
 import Element exposing (Element, rgb)
 import Element.Background
 import Element.Border as Border
 import Html.Attributes
 import Palette
+import Url exposing (Url)
 
 
 type Model
@@ -19,19 +21,17 @@ type alias Lesson =
 
 
 type Msg
-    = Increment
-    | Decrement
+    = ChangeUrl Url
+    | ClickLink UrlRequest
 
 
-main : Program () Model Msg
-main =
-    Browser.sandbox
-        { init =
-            Model
-                { title =
-                    "Using TDD to write a Leap Years function"
-                , summary =
-                    """
+init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url navKey =
+    ( Model
+        { title =
+            "Using TDD to write a Leap Years function"
+        , summary =
+            """
 This is often the first exercise I do with new teams.
 You have to TDD a function that takes an integer argument
 and returns a boolean. It ends up being a rather small piece
@@ -44,12 +44,12 @@ modulo operator when implementing the first test case. That
 keeps the demo shorter, and means you don’t need to explain
 triangulation as a concept.
 """
-                }
-        , view = view
-        , update = update
         }
+    , Cmd.none
+    )
 
 
+view : Model -> Document msg
 view model =
     let
         ideaPadLink =
@@ -58,12 +58,16 @@ view model =
                 , label = Element.text "Idea Scratch Pad"
                 }
     in
-    Element.layout
-        [ Element.Background.color Palette.pageBackground
-        , Element.inFront ideaPadLink
+    { title = "Learning Hour Kit"
+    , body =
+        [ Element.layout
+            [ Element.Background.color Palette.pageBackground
+            , Element.inFront ideaPadLink
+            ]
+            -- layout converts from Element to Html
+            (lessonBox model)
         ]
-        -- layout converts from Element to Html
-        (lessonBox model)
+    }
 
 
 lessonBox : Model -> Element a
@@ -98,6 +102,18 @@ lessonBox (Model lesson) =
         )
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd a )
 update msg model =
-    model
+        ( model, Cmd.none )
+
+
+main : Program () Model Msg
+main =
+    Browser.application
+        { init = init
+        , view = view
+        , subscriptions = \_ -> Sub.none
+        , update = update
+        , onUrlRequest = ClickLink
+        , onUrlChange = ChangeUrl
+        }
