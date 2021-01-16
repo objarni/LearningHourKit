@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Element exposing (Element, rgb)
 import Element.Background
 import Element.Border as Border
+import Element.Font as Font
 import Html.Attributes
 import Palette
 import Url exposing (Url)
@@ -17,7 +18,19 @@ type Model
 type alias Lesson =
     { title : String
     , summary : String
+    , sections : List Section
     }
+
+
+type alias Section =
+    { header : String
+    , body : List Segment
+    }
+
+
+type Segment
+    = Paragraph String
+    | BulletList (List String)
 
 
 type Msg
@@ -44,6 +57,33 @@ modulo operator when implementing the first test case. That
 keeps the demo shorter, and means you don’t need to explain
 triangulation as a concept.
 """
+        , sections =
+            [ { header = "Session Outline"
+              , body =
+                    [ BulletList
+                        [ "10 min connect: divide into pairs, write down 3 benefits of TDD"
+                        , "15 min concept: demo leap years"
+                        , "20 min do: leap years in pairs"
+                        , "10 min reflect: summary of main idea"
+                        ]
+                    ]
+              }
+            , { header = "Connect"
+              , body =
+                    [ Paragraph """
+Have everyone stand up and
+stand at one side of the room.
+Ask them to walk a few steps towards the other side of the
+room in proportion to their answers to these questions. More
+confidence means they should walk further:"""
+                    , BulletList
+                        [ "confidence pair programming"
+                        , "confidence with unit testing"
+                        , "confidence with Test-Driven Development"
+                        ]
+                    ]
+              }
+            ]
         }
     , Cmd.none
     )
@@ -74,23 +114,65 @@ view model =
     }
 
 
+paraE : String -> Element a
+paraE s =
+    Element.paragraph [] [ Element.text s ]
+
+
+headerE : String -> Element a
+headerE text =
+    Element.el
+        [ Font.size 24
+        , Font.family
+            [ Font.typeface "Open Sans"
+            , Font.sansSerif
+            ]
+        , Element.paddingEach { top = 15, bottom = 8, right = 0, left = 0 }
+        ]
+        (Element.text text)
+
+
 lessonBox : Model -> Element a
 lessonBox (Model lesson) =
     let
         summaryE =
-            Element.paragraph [] [ Element.text lesson.summary ]
+            paraE lesson.summary
 
         titleE =
-            Element.text lesson.title
+            headerE lesson.title
+
+        renderSegment : Segment -> Element a
+        renderSegment segment =
+            case segment of
+                Paragraph text ->
+                    paraE text
+
+                BulletList bullets ->
+                    let
+                        bulletedItems =
+                            List.map paraE (List.map (\s -> "* " ++ s) bullets)
+                    in
+                    Element.column [ Element.paddingXY 5 0 ] bulletedItems
+
+        renderBody : List Segment -> Element a
+        renderBody segments =
+            Element.column []
+                (List.map renderSegment segments)
+
+        renderSection : Section -> List (Element a)
+        renderSection { header, body } =
+            [ headerE header, renderBody body ]
+
+        renderSections ss =
+            List.concatMap renderSection ss
 
         navigateE =
             Element.row [ Element.alignBottom, Element.centerX ] [ Element.text "<", Element.text ">" ]
 
         lessonDesc =
             Element.column
-                -- these two centers the Element.text in div
                 [ Element.centerX, Element.padding 40 ]
-                [ Element.column [] [ titleE, summaryE ] ]
+                [ Element.column [] ([ titleE, summaryE ] ++ renderSections lesson.sections) ]
     in
     Element.el
         [ Element.centerX -- these two centers the div

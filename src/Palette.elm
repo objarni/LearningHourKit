@@ -8,4 +8,4 @@ contentBackground =
 
 
 pageBackground =
-    Element.rgb255 245 245 255
+    Element.rgb255 200 240 200
